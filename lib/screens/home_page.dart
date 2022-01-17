@@ -21,13 +21,14 @@ class _HomePageState extends State<HomePage> {
     final response=await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
     var data=jsonDecode(response.body.toString());
     if(response.statusCode==200){
+      postList.clear();
         for(Map i in data){
           postList.add(PostsModel.fromJson(i));
         }
         return postList;
     }
     else  {
-      return null;
+      return postList;
     }
   }
 
@@ -49,7 +50,15 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(
                       itemCount: postList.length,
                       itemBuilder: (context,index){
-                    return Text(index.toString());
+                    return Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Title :' + postList[index].title.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
+                          Text('Description :' + postList[index].body.toString())
+                        ],
+                      ),
+                    );
                   });
             }),
           )
